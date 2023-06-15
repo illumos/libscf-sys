@@ -1,0 +1,13 @@
+[package]
+name = "libscf-sys"
+version = "1.0.0"
+edition = "2021"
+license = "MPL-2.0"
+description = "native bindings to libscf, the service management facility (SMF)"
+keywords = ["smf", "illumos", "libscf", "scf"]
+repository = "https://github.com/illumos/libscf-sys"
+
+[dependencies]
+libc = "0.2"
+num-derive = "0.3"
+num-traits = "0.2"
