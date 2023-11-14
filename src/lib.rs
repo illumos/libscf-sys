@@ -122,6 +122,21 @@ pub const SCF_DECODE_FMRI_TRUNCATE: c_int = 0x00000002;
 pub const SCF_DECODE_FMRI_REQUIRE_INSTANCE: c_int = 0x00000004;
 pub const SCF_DECODE_FMRI_REQUIRE_NO_INSTANCE: c_int = 0x00000008;
 
+pub const SCF_DECORATE_CLEAR: *mut scf_value_t = std::ptr::null_mut();
+
+pub mod decorations {
+    /**
+     * The "debug" decoration accepts a (count) value with debugging flags.
+     */
+    pub const DEBUG: &[u8] = b"debug\0";
+
+    /**
+     * The "zone" decoration is not Committed, and should not be used in
+     * applications.
+     */
+    pub const ZONE: &[u8] = b"zone\0";
+}
+
 #[cfg(target_os = "illumos")]
 mod native;
 #[cfg(target_os = "illumos")]

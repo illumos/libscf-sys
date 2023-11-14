@@ -32,6 +32,14 @@ mod stubs {
         unimplemented!()
     }
 
+    pub unsafe fn scf_handle_decorate(
+        handle: *mut scf_handle_t,
+        param: *const c_char,
+        value: *mut scf_value_t,
+    ) -> c_int {
+        unimplemented!()
+    }
+
     pub unsafe fn scf_myname(
         handle: *mut scf_handle_t,
         out: *mut c_char,

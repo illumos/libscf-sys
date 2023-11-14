@@ -15,6 +15,11 @@ extern "C" {
     pub fn scf_handle_destroy(handle: *mut scf_handle_t);
     pub fn scf_handle_bind(handle: *mut scf_handle_t) -> c_int;
     pub fn scf_handle_unbind(handle: *mut scf_handle_t) -> c_int;
+    pub fn scf_handle_decorate(
+        handle: *mut scf_handle_t,
+        param: *const c_char,
+        value: *mut scf_value_t,
+    ) -> c_int;
 
     pub fn scf_myname(
         handle: *mut scf_handle_t,
