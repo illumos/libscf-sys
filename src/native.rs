@@ -39,7 +39,7 @@ extern "C" {
     pub fn scf_scope_create(handle: *mut scf_handle_t) -> *mut scf_scope_t;
     pub fn scf_scope_destroy(scope: *mut scf_scope_t);
     pub fn scf_scope_get_name(
-        scope: *mut scf_scope_t,
+        scope: *const scf_scope_t,
         buf: *mut c_char,
         size: size_t,
     ) -> ssize_t;
@@ -50,7 +50,7 @@ extern "C" {
     ) -> c_int;
 
     pub fn scf_scope_get_service(
-        scope: *mut scf_scope_t,
+        scope: *const scf_scope_t,
         name: *const c_char,
         out: *mut scf_service_t,
     ) -> c_int;
@@ -74,12 +74,12 @@ extern "C" {
     pub fn scf_service_delete(service: *mut scf_service_t) -> c_int;
 
     pub fn scf_service_get_name(
-        service: *mut scf_service_t,
+        service: *const scf_service_t,
         buf: *mut c_char,
         size: size_t,
     ) -> ssize_t;
     pub fn scf_service_get_instance(
-        service: *mut scf_service_t,
+        service: *const scf_service_t,
         name: *const c_char,
         out: *mut scf_instance_t,
     ) -> c_int;
@@ -105,12 +105,12 @@ extern "C" {
     pub fn scf_instance_delete(instance: *mut scf_instance_t) -> c_int;
 
     pub fn scf_instance_get_name(
-        instance: *mut scf_instance_t,
+        instance: *const scf_instance_t,
         buf: *mut c_char,
         size: size_t,
     ) -> ssize_t;
     pub fn scf_instance_get_pg(
-        instance: *mut scf_instance_t,
+        instance: *const scf_instance_t,
         name: *const c_char,
         out: *mut scf_propertygroup_t,
     ) -> c_int;
@@ -122,13 +122,13 @@ extern "C" {
         out: *mut scf_propertygroup_t,
     ) -> c_int;
     pub fn scf_instance_get_pg_composed(
-        instance: *mut scf_instance_t,
-        snapshot: *mut scf_snapshot_t,
+        instance: *const scf_instance_t,
+        snapshot: *const scf_snapshot_t,
         name: *const c_char,
         out: *mut scf_propertygroup_t,
     ) -> c_int;
     pub fn scf_instance_get_snapshot(
-        instance: *mut scf_instance_t,
+        instance: *const scf_instance_t,
         name: *const c_char,
         out: *mut scf_snapshot_t,
     ) -> c_int;
@@ -153,7 +153,7 @@ extern "C" {
     pub fn scf_snapshot_destroy(snapshot: *mut scf_snapshot_t);
 
     pub fn scf_snapshot_get_name(
-        snapshot: *mut scf_snapshot_t,
+        snapshot: *const scf_snapshot_t,
         buf: *mut c_char,
         size: size_t,
     ) -> ssize_t;
@@ -195,22 +195,22 @@ extern "C" {
     pub fn scf_pg_delete(pg: *mut scf_propertygroup_t) -> c_int;
 
     pub fn scf_pg_get_name(
-        pg: *mut scf_propertygroup_t,
+        pg: *const scf_propertygroup_t,
         buf: *mut c_char,
         size: size_t,
     ) -> ssize_t;
     pub fn scf_pg_get_type(
-        pg: *mut scf_propertygroup_t,
+        pg: *const scf_propertygroup_t,
         buf: *mut c_char,
         size: size_t,
     ) -> ssize_t;
     pub fn scf_pg_get_flags(
-        pg: *mut scf_propertygroup_t,
+        pg: *const scf_propertygroup_t,
         out: *mut u32,
     ) -> c_int;
     pub fn scf_pg_update(pg: *mut scf_propertygroup_t) -> c_int;
     pub fn scf_pg_get_property(
-        pg: *mut scf_propertygroup_t,
+        pg: *const scf_propertygroup_t,
         name: *const c_char,
         out: *mut scf_property_t,
     ) -> c_int;
@@ -230,12 +230,12 @@ extern "C" {
     pub fn scf_property_destroy(prop: *mut scf_property_t);
 
     pub fn scf_property_get_name(
-        prop: *mut scf_property_t,
+        prop: *const scf_property_t,
         buf: *mut c_char,
         size: size_t,
     ) -> ssize_t;
     pub fn scf_property_type(
-        prop: *mut scf_property_t,
+        prop: *const scf_property_t,
         typ: *mut scf_type_t,
     ) -> ssize_t;
 
@@ -252,16 +252,16 @@ extern "C" {
     pub fn scf_value_destroy(val: *mut scf_value_t);
     pub fn scf_value_reset(val: *mut scf_value_t);
 
-    pub fn scf_value_type(val: *mut scf_value_t) -> c_int;
-    pub fn scf_value_base_type(val: *mut scf_value_t) -> c_int;
+    pub fn scf_value_type(val: *const scf_value_t) -> c_int;
+    pub fn scf_value_base_type(val: *const scf_value_t) -> c_int;
 
     pub fn scf_value_get_as_string(
-        val: *mut scf_value_t,
+        val: *const scf_value_t,
         buf: *mut c_char,
         size: size_t,
     ) -> ssize_t;
     pub fn scf_value_get_as_string_typed(
-        val: *mut scf_value_t,
+        val: *const scf_value_t,
         type_: scf_type_t,
         buf: *mut c_char,
         size: size_t,
@@ -272,27 +272,33 @@ extern "C" {
         valstr: *const c_char,
     ) -> c_int;
 
-    pub fn scf_value_get_boolean(val: *mut scf_value_t, out: *mut u8) -> c_int;
-    pub fn scf_value_get_count(val: *mut scf_value_t, out: *mut u64) -> c_int;
-    pub fn scf_value_get_integer(val: *mut scf_value_t, out: *mut i64)
+    pub fn scf_value_get_boolean(
+        val: *const scf_value_t,
+        out: *mut u8,
+    ) -> c_int;
+    pub fn scf_value_get_count(val: *const scf_value_t, out: *mut u64)
         -> c_int;
+    pub fn scf_value_get_integer(
+        val: *const scf_value_t,
+        out: *mut i64,
+    ) -> c_int;
     pub fn scf_value_get_time(
-        val: *mut scf_value_t,
+        val: *const scf_value_t,
         seconds: *mut i64,
         ns: *mut i32,
     ) -> c_int;
     pub fn scf_value_get_astring(
-        val: *mut scf_value_t,
+        val: *const scf_value_t,
         buf: *mut c_char,
         size: size_t,
     ) -> c_int;
     pub fn scf_value_get_ustring(
-        val: *mut scf_value_t,
+        val: *const scf_value_t,
         buf: *mut c_char,
         size: size_t,
     ) -> c_int;
     pub fn scf_value_get_opaque(
-        val: *mut scf_value_t,
+        val: *const scf_value_t,
         buf: *mut c_void,
         size: size_t,
     ) -> c_int;
