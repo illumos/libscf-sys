@@ -1,11 +1,11 @@
 /*
- * Copyright 2023 Oxide Computer Company
+ * Copyright 2024 Oxide Computer Company
  */
 
 #![allow(non_camel_case_types)]
 #![allow(dead_code)]
 
-use libc::{size_t, ssize_t};
+use libc::{c_void, size_t, ssize_t};
 
 use crate::*;
 
@@ -71,6 +71,7 @@ extern "C" {
 
     pub fn scf_service_create(handle: *mut scf_handle_t) -> *mut scf_service_t;
     pub fn scf_service_destroy(service: *mut scf_service_t);
+    pub fn scf_service_delete(service: *mut scf_service_t) -> c_int;
 
     pub fn scf_service_get_name(
         service: *mut scf_service_t,
@@ -101,6 +102,7 @@ extern "C" {
         handle: *mut scf_handle_t,
     ) -> *mut scf_instance_t;
     pub fn scf_instance_destroy(instance: *mut scf_instance_t);
+    pub fn scf_instance_delete(instance: *mut scf_instance_t) -> c_int;
 
     pub fn scf_instance_get_name(
         instance: *mut scf_instance_t,
@@ -190,6 +192,7 @@ extern "C" {
     pub fn scf_pg_create(handle: *mut scf_handle_t)
         -> *mut scf_propertygroup_t;
     pub fn scf_pg_destroy(pg: *mut scf_propertygroup_t);
+    pub fn scf_pg_delete(pg: *mut scf_propertygroup_t) -> c_int;
 
     pub fn scf_pg_get_name(
         pg: *mut scf_propertygroup_t,
@@ -257,10 +260,65 @@ extern "C" {
         buf: *mut c_char,
         size: size_t,
     ) -> ssize_t;
+    pub fn scf_value_get_as_string_typed(
+        val: *mut scf_value_t,
+        type_: scf_type_t,
+        buf: *mut c_char,
+        size: size_t,
+    ) -> ssize_t;
     pub fn scf_value_set_from_string(
         val: *mut scf_value_t,
         valtype: scf_type_t,
         valstr: *const c_char,
+    ) -> c_int;
+
+    pub fn scf_value_get_boolean(val: *mut scf_value_t, out: *mut u8) -> c_int;
+    pub fn scf_value_get_count(val: *mut scf_value_t, out: *mut u64) -> c_int;
+    pub fn scf_value_get_integer(val: *mut scf_value_t, out: *mut i64)
+        -> c_int;
+    pub fn scf_value_get_time(
+        val: *mut scf_value_t,
+        seconds: *mut i64,
+        ns: *mut i32,
+    ) -> c_int;
+    pub fn scf_value_get_astring(
+        val: *mut scf_value_t,
+        buf: *mut c_char,
+        size: size_t,
+    ) -> c_int;
+    pub fn scf_value_get_ustring(
+        val: *mut scf_value_t,
+        buf: *mut c_char,
+        size: size_t,
+    ) -> c_int;
+    pub fn scf_value_get_opaque(
+        val: *mut scf_value_t,
+        buf: *mut c_void,
+        size: size_t,
+    ) -> c_int;
+
+    pub fn scf_value_set_boolean(val: *mut scf_value_t, new: u8);
+    pub fn scf_value_set_count(val: *mut scf_value_t, new: u64);
+    pub fn scf_value_set_integer(val: *mut scf_value_t, new: i64);
+    pub fn scf_value_set_time(
+        val: *mut scf_value_t,
+        seconds: i64,
+        ns: i32,
+    ) -> c_int;
+    pub fn scf_value_set_astring(
+        val: *mut scf_value_t,
+        new: *const c_char,
+        size: size_t,
+    ) -> c_int;
+    pub fn scf_value_set_ustring(
+        val: *mut scf_value_t,
+        new: *const c_char,
+        size: size_t,
+    ) -> c_int;
+    pub fn scf_value_set_opaque(
+        val: *mut scf_value_t,
+        new: *const c_void,
+        size: size_t,
     ) -> c_int;
 
     pub fn scf_type_base_type(typ: scf_type_t, out: *mut scf_type_t) -> c_int;
