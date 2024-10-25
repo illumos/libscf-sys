@@ -2,7 +2,7 @@
 name = "libscf-sys"
 version = "1.1.0"
 edition = "2021"
-license = "MPL-2.0"
+license = "MIT OR Apache-2.0"
 description = "native bindings to libscf, the service management facility (SMF)"
 keywords = ["smf", "illumos", "libscf", "scf"]
 repository = "https://github.com/illumos/libscf-sys"
